@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grw.cursos.modules.course.entities.CourseEntity;
 import com.grw.cursos.modules.course.usecases.CreateCourseUsecase;
+import com.grw.cursos.modules.course.usecases.DeleteCourseUsecase;
 import com.grw.cursos.modules.course.usecases.GetCoursesUsecase;
 
 import jakarta.validation.Valid;
@@ -24,6 +25,8 @@ public class CourseController {
     private CreateCourseUsecase createCourseUsecase;
     @Autowired
     private GetCoursesUsecase getCoursesUsecase;
+    @Autowired
+    private DeleteCourseUsecase deleteCourseUsecase;
 
     @PostMapping("/")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
@@ -55,6 +58,13 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCourse(@PathVariable String id) {
+    public ResponseEntity<Object> deleteCourse(@PathVariable String id) {
+        try {
+            this.deleteCourseUsecase.execute(id);
+            return ResponseEntity.ok("Curso excluido");
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
     }
 }
