@@ -1,5 +1,7 @@
 package com.grw.cursos.modules.course.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,11 +13,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.grw.cursos.modules.course.dtos.CourseUpdateDTO;
 import com.grw.cursos.modules.course.entities.CourseEntity;
 import com.grw.cursos.modules.course.usecases.ActivateCourseUsecase;
 import com.grw.cursos.modules.course.usecases.CreateCourseUsecase;
 import com.grw.cursos.modules.course.usecases.DeleteCourseUsecase;
 import com.grw.cursos.modules.course.usecases.GetCoursesUsecase;
+import com.grw.cursos.modules.course.usecases.UpdateCourseUsecase;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +35,8 @@ public class CourseController {
     private DeleteCourseUsecase deleteCourseUsecase;
     @Autowired
     private ActivateCourseUsecase activateCourseUsecase;
+    @Autowired
+    private UpdateCourseUsecase updateCourseUsecase;
 
     @PostMapping("/")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
@@ -52,7 +59,13 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public void updatedCourse(@PathVariable String id, @RequestBody CourseEntity courseEntity) {
+    public ResponseEntity<Object> updatedCourse(@PathVariable String id, @RequestBody CourseUpdateDTO data) {
+        try {
+            var result = updateCourseUsecase.execute(UUID.fromString(id), data);
+            return ResponseEntity.ok(result);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @PatchMapping("/{id}/activate")
