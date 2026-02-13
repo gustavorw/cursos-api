@@ -1,0 +1,11 @@
+services:
+  postgres:
+    container_name: courses_api
+    image: mirror.gcr.io/library/postgres:alpine
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=courses_db
