@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grw.cursos.modules.course.entities.CourseEntity;
+import com.grw.cursos.modules.course.usecases.ActivateCourseUsecase;
 import com.grw.cursos.modules.course.usecases.CreateCourseUsecase;
 import com.grw.cursos.modules.course.usecases.DeleteCourseUsecase;
 import com.grw.cursos.modules.course.usecases.GetCoursesUsecase;
@@ -27,13 +28,14 @@ public class CourseController {
     private GetCoursesUsecase getCoursesUsecase;
     @Autowired
     private DeleteCourseUsecase deleteCourseUsecase;
+    @Autowired
+    private ActivateCourseUsecase activateCourseUsecase;
 
     @PostMapping("/")
     public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
         try {
             var result = this.createCourseUsecase.execute(courseEntity);
             return ResponseEntity.ok(result);
-
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
@@ -54,7 +56,14 @@ public class CourseController {
     }
 
     @PatchMapping("/{id}/activate")
-    public void activateCourse(@PathVariable String id) {
+    public ResponseEntity<Object> activateCourse(@PathVariable String id) {
+        try {
+            var result = this.activateCourseUsecase.execute(id);
+            return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -65,6 +74,5 @@ public class CourseController {
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }
-
     }
 }
