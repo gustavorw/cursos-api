@@ -22,7 +22,7 @@ public class ActivateCourseUsecase {
         }
 
         CourseEntity course = optionalCourse.get();
-        course.setActive(true);
+        course.setActive(!course.isActive());
         this.courseRepository.save(course);
         return course;
     }
