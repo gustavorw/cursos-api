@@ -1,5 +1,11 @@
 package com.grw.cursos.modules.course.repos;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface CourseRepository {
+import com.grw.cursos.modules.course.entities.CourseEntity;
+
+@Repository
+public interface CourseRepository extends JpaRepository<CourseEntity, UUID> {
     
 }

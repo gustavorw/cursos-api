@@ -1,16 +1,60 @@
 package com.grw.cursos.modules.course.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.grw.cursos.modules.course.entities.CourseEntity;
+import com.grw.cursos.modules.course.usecases.CreateCourseUsecase;
+import com.grw.cursos.modules.course.usecases.GetCoursesUsecase;
+
+import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/courses")
 public class CourseController {
-    
-    public void createCourse(@RequestBody CourseEntity courseEntity){}
-    public void getCourses(){}
-    public void updatedCourse(@RequestBody CourseEntity courseEntity){}
-    public void activateCourse(){}
-    public void deleteCourse(){}
+    @Autowired
+    private CreateCourseUsecase createCourseUsecase;
+    @Autowired
+    private GetCoursesUsecase getCoursesUsecase;
+
+    @PostMapping("/")
+    public ResponseEntity<Object> createCourse(@Valid @RequestBody CourseEntity courseEntity) {
+        try {
+            var result = this.createCourseUsecase.execute(courseEntity);
+            return ResponseEntity.ok(result);
+
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<Object> getCourses() {
+        try {
+            var result = this.getCoursesUsecase.execute();
+            return ResponseEntity.ok(result);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public void updatedCourse(@PathVariable String id, @RequestBody CourseEntity courseEntity) {
+    }
+
+    @PatchMapping("/{id}/activate")
+    public void activateCourse(@PathVariable String id) {
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCourse(@PathVariable String id) {
+    }
 }
