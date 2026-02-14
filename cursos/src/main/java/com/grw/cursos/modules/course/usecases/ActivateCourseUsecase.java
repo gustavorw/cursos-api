@@ -1,8 +1,5 @@
 package com.grw.cursos.modules.course.usecases;
-
-import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +13,9 @@ public class ActivateCourseUsecase {
     private CourseRepository courseRepository;
 
     public CourseEntity execute(String uuid) {
-        Optional<CourseEntity> optionalCourse = this.courseRepository.findById(UUID.fromString(uuid));
-        if (!optionalCourse.isPresent()) {
-            throw new NotFoundCourseException();
-        }
+        var course = this.courseRepository.findById(UUID.fromString(uuid))
+                .orElseThrow(() -> new NotFoundCourseException());
 
-        CourseEntity course = optionalCourse.get();
         course.setActive(!course.isActive());
         this.courseRepository.save(course);
         return course;
