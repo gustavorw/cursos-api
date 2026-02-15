@@ -2,7 +2,6 @@ package com.grw.cursos.modules.course.usecases;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.grw.cursos.exceptions.NotFoundCourseException;
 import com.grw.cursos.modules.course.entities.CourseEntity;
 import com.grw.cursos.modules.course.repos.CourseRepository;
@@ -17,7 +16,7 @@ public class ActivateCourseUsecase {
                 .orElseThrow(() -> new NotFoundCourseException());
 
         course.setActive(!course.isActive());
-        this.courseRepository.save(course);
-        return course;
+        return this.courseRepository.save(course);
+
     }
 }

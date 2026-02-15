@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grw.cursos.modules.course.dtos.CourseUpdateDTO;
@@ -49,9 +50,10 @@ public class CourseController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Object> getCourses() {
+    public ResponseEntity<Object> getCourses(@RequestParam(required = false) String name,
+            @RequestParam(required = false) String category) {
         try {
-            var result = this.getCoursesUsecase.execute();
+            var result = this.getCoursesUsecase.execute(name, category);
             return ResponseEntity.ok(result);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
